@@ -27,6 +27,7 @@ function render() {
     div.querySelector("table").appendChild(document.createElement("tr"));
     for(j=0;j<7;j++){
       div.querySelector("table").children[i].appendChild(document.createElement("td"));
+      div.querySelector("table").children[i].children[j].dataset.column = j;
       if(board[i][j] === 1){
         div.querySelector("table").children[i].children[j].className = "player1";
       }else if(board[i][j] === 2){
@@ -39,17 +40,24 @@ function render() {
 var turn = 1;
 
 function play(column) {
-  for(i=5; i>=0;i++){
+  for(i=5; i>=0;i--){
     if(board[i][column] === 0){
-      board[i][column] = turn;
+      set(i, column, turn);
       return i;
     }
   }
   return false;
 }
 
+function action(e){
+   console.log(e.target.dataset.column);
+   if(e.target.dataset.column){
+     play(e.target.dataset.column);
+     render();
+     turn = (turn % 2) + 1;
+   }
+}
 
+document.querySelector("#principal").addEventListener('click',action);
 
-play(1);
 console.log(render());
-console.log(event.target);
